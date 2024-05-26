@@ -1,11 +1,14 @@
 import mongoose from "mongoose";
+import { addressSchema } from "./user";
 
-const addressSchema = new mongoose.Schema({
-  street: { type: String, required: true },
-  city: { type: String, required: true },
-  postCode: { type: String, required: true },
-  country: { type: String, required: true },
-});
+const generateCustomId = () => {
+  const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const randomLetters =
+    letters.charAt(Math.floor(Math.random() * 26)) +
+    letters.charAt(Math.floor(Math.random() * 26));
+  const randomNumbers = Math.floor(1000 + Math.random() * 9000).toString();
+  return `${randomLetters}${randomNumbers}`;
+};
 
 const itemSchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -15,10 +18,12 @@ const itemSchema = new mongoose.Schema({
 });
 
 const invoiceSchema = new mongoose.Schema({
+  _id: { type: String, default: generateCustomId },
   user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   createdAt: { type: Date, required: true },
-  paymentDate: { type: Date },
+  paymentDue: { type: Date },
   paymentTerms: { type: Number, required: true },
+  description: { type: String, required: true },
   clientName: {
     type: String,
     required: true,
@@ -29,7 +34,7 @@ const invoiceSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["pending", "paid"],
+    enum: ["draft", "pending", "paid"],
     required: true,
     default: "pending",
   },

@@ -44,11 +44,10 @@ const updateCurrentUser = async (req: Request, res: Response) => {
       return res.status(404).json({ message: "User not found" });
     }
 
+    const address = { street, city, postCode, country };
+
     user.name = name;
-    user.street = street;
-    user.postCode = postCode;
-    user.city = city;
-    user.country = country;
+    user.address = address;
     await user.save();
     res.send(user);
   } catch (error) {

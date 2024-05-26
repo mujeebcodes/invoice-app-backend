@@ -1,5 +1,12 @@
 import mongoose from "mongoose";
 
+export const addressSchema = new mongoose.Schema({
+  street: { type: String, required: true },
+  city: { type: String, required: true },
+  postCode: { type: String, required: true },
+  country: { type: String, required: true },
+});
+
 const userSchema = new mongoose.Schema({
   auth0Id: {
     type: String,
@@ -11,10 +18,7 @@ const userSchema = new mongoose.Schema({
   name: {
     type: String,
   },
-  street: { type: String },
-  city: { type: String },
-  postCode: { type: String },
-  country: { type: String },
+  address: { type: addressSchema },
 });
 
 const User = mongoose.model("User", userSchema);
